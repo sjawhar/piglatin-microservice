@@ -1,4 +1,5 @@
 import unittest
+from src import piglatin
 
 class TestPigLatinMethods(unittest.TestCase):
 
@@ -57,8 +58,8 @@ class TestPigLatinMethods(unittest.TestCase):
         pass
 
     ### _convert_word() ###
-    def test_convert_word(self):
-        words_to_test = {
+    def test_convert_word_works_with_dereks_examples(self):
+        dereks_examples = {
             'pig' : 'igpay',
             'banana' : 'ananabay',
             'trash' : 'ashtray',
@@ -69,7 +70,14 @@ class TestPigLatinMethods(unittest.TestCase):
             'omelet' : 'omeletyay',
             'are' : 'areyay',
         }
-        pass
+
+        for (word, translation) in dereks_examples.iteritems():
+            test_translation = piglatin.to_pig_latin(word)
+            self.assertEqual(
+                translation,
+                test_translation,
+                'translation of ' + word + ' should be ' + translation + ', but instead got ' + test_translation
+            )
     
     ### to_pig_latin() ###
     def test_to_pig_latin_preserves_word_count(self):
