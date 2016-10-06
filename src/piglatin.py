@@ -5,27 +5,27 @@ _VOWELS = ('a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U')
 _PUNCTUATION = set(string.punctuation)
 
 def _convert_word(word):
-    stripped_word = _strip_leading_trailing_punctuation(word)
-    if len(stripped_word) == 0:
+    trimmed_word = _trim_punctuation(word)
+    if len(trimmed_word) == 0:
         return word
 
     first_vowel = -1
-    for i in range(len(stripped_word)):
-        if stripped_word[i] in _VOWELS:
+    for i in range(len(trimmed_word)):
+        if trimmed_word[i] in _VOWELS:
             first_vowel = i
             break
 
     if first_vowel == -1:
-        converted_word = stripped_word + 'ay'
+        converted_word = trimmed_word + 'ay'
     elif first_vowel == 0:
-        converted_word = stripped_word + 'yay'
+        converted_word = trimmed_word + 'yay'
     else:
-        converted_word = stripped_word[first_vowel:] + stripped_word[:first_vowel] + 'ay'
+        converted_word = trimmed_word[first_vowel:] + trimmed_word[:first_vowel] + 'ay'
 
-    converted_word = _match_capitalization(converted_word, stripped_word)
-    return word.replace(stripped_word, converted_word)
+    converted_word = _match_capitalization(converted_word, trimmed_word)
+    return word.replace(trimmed_word, converted_word)
 
-def _strip_leading_trailing_punctuation(word):
+def _trim_punctuation(word):
     return word.strip(''.join(_PUNCTUATION))
 
 def _match_capitalization(word, match_word):
@@ -50,6 +50,8 @@ def to_pig_latin(text):
         text -- the text to convert
 
     """
+    if not isinstance(text, basestring):
+        raise TypeError('Argument passed to to_pig_latin() must be a string.')
 
     lines = _split_lines(text)
     converted_lines = []
