@@ -38,8 +38,8 @@ class PigLatinProcedure(object):
         request.context['result'] = {'translation': translation}
 
 procedure = PigLatinProcedure()
-app = falcon.API(middleware=[
+api = falcon.API(middleware=[
     RequireJson(),
     JsonTranslator(),
 ])
-app.add_route('/', procedure)
+api.add_route('/', procedure)
