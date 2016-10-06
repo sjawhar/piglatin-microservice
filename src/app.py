@@ -15,6 +15,11 @@ class PigLatinProcedure(object):
 
         if 'text' not in doc:
             raise falcon.HTTPMissingParam('text')
+        elif not isinstance(doc['text'], basestring):
+            raise falcon.HTTPInvalidParam(
+                'The value is not a string.',
+                'text'
+            )
         elif len(doc['text']) == 0:
             raise falcon.HTTPInvalidParam(
                 'The value is empty.',
