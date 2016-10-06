@@ -1,19 +1,31 @@
 import string
-#from nltk.tokenize import word_tokenize
+import os
 
 class PigLatinTranslator:
 
-    ## Based on http://www.mit.edu/~johnp/6.189/solutions/piglatin.py
-    _VOWELS = ('a', 'e', 'i', 'o', 'u')
+    _VOWELS = ('a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U')
     _PUNCTUATION = set(string.punctuation)
 
     def _convert_word(self, word):
-        # TODO
-        tmp = ''
-    
-    def _split_text(self, text):
-        # TODO
-        tmp = ''
+        stripped_word = word.strip(''.join(self._PUNCTUATION))
+        first_vowel = -1
+        for i in range(len(stripped_word)):
+            if stripped_word[i] in self._VOWELS:
+                first_vowel = i
+                break
+
+        if first_vowel == -1:
+            converted_word = stripped_word + 'ay'
+        elif first_vowel == 0:
+            converted_word = stripped_word + 'yay'
+        else:
+            converted_word = stripped_word[first_vowel:] + stripped_word[:first_vowel] + 'ay'
+
+        converted_word = self._match_capitalization(converted_word, stripped_word)
+        return word.replace(stripped_word, converted_word)
+
+    def _match_capitalization(self, word, match_word):
+        return word
 
     def _split_words(self, text):
         return text.split(' ')
