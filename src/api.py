@@ -3,14 +3,16 @@ from middleware import RequireJson, JsonTranslator
 from piglatin import PigLatinTranslator
 
 class PigLatinProcedure(object):
+
     def on_post(self, request, response):
+        
         if request.content_length in (None, 0):
             raise falcon.HTTPBadRequest(
                 'No text',
                 'The request body must contain text to translate.'
             )
-
         doc = request.context['doc']
+
         if 'text' not in doc:
             raise falcon.HTTPMissingParam('text')
         elif len(doc['text']) == 0:
@@ -18,7 +20,6 @@ class PigLatinProcedure(object):
                 'The value is empty.',
                 'text'
             )
-        
         text = doc['text']
         
         try:
