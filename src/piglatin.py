@@ -59,7 +59,8 @@ def _trim_punctuation(word):
     return word.strip(''.join(_PUNCTUATION))
 
 def _match_capitalization(word, match_word):
-    # TODO
+    if match_word.istitle():
+        return word.title()
     return word
 
 def _split_words(text):
