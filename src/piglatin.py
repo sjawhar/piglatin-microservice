@@ -5,7 +5,7 @@ _VOWELS = ('a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U')
 _PUNCTUATION = set(string.punctuation)
 
 def _convert_word(word):
-    stripped_word = word.strip(''.join(_PUNCTUATION))
+    stripped_word = _strip_leading_trailing_punctuation(word)
     if len(stripped_word) == 0:
         return word
 
@@ -25,6 +25,9 @@ def _convert_word(word):
     converted_word = _match_capitalization(converted_word, stripped_word)
     return word.replace(stripped_word, converted_word)
 
+def _strip_leading_trailing_punctuation(word):
+    return word.strip(''.join(_PUNCTUATION))
+
 def _match_capitalization(word, match_word):
     return word
 
@@ -34,29 +37,14 @@ def _split_words(text):
 def _join_words(words):
     return ' '.join(words)
 
-def _convert_line(line):
-
-    words = _split_words(line)
-    converted_words = []
-
-    # Call _covert_word() for each word
-    for word in words:
-        converted_words.append(_convert_word(word))
-
-    # Reassemble text
-    text = _join_words(converted_words)
-
-    # Return result
-    return text
-
 def _split_lines(text):
     return text.split(os.linesep)
 
 def _join_lines(lines):
     return os.linesep.join(lines)
 
-def convert(text):
-    """Convert text to pig latin, using the standard 
+def to_pig_latin(text):
+    """Convert text to pig latin
 
     Keyword arguments:
         text -- the text to convert
@@ -65,7 +53,11 @@ def convert(text):
 
     lines = _split_lines(text)
     converted_lines = []
-    for line in lines:
-        converted_lines.append(_convert_line(line))
 
+    for line in lines:
+        words = _split_words(line)
+        converted_words = []
+        for word in words:
+            converted_words.append(_convert_word(word))
+        converted_lines.append(_join_words(converted_words))
     return _join_lines(converted_lines)

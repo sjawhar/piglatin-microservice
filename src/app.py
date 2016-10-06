@@ -26,9 +26,9 @@ class PigLatinProcedure(object):
                 'text'
             )
         text = doc['text']
-        
+
         try:
-            translation = piglatin.convert(text)
+            translation = piglatin.to_pig_latin(text)
         except Exception,e:
             description = None
             if (len(e.args) > 0):
