@@ -1,11 +1,11 @@
 import falcon
 from middleware import RequireJson, JsonTranslator
-from piglatin import PigLatinTranslator
+import piglatin
 
 class PigLatinProcedure(object):
 
     def on_post(self, request, response):
-        
+
         if request.content_length in (None, 0):
             raise falcon.HTTPBadRequest(
                 'No text',
@@ -23,8 +23,7 @@ class PigLatinProcedure(object):
         text = doc['text']
         
         try:
-            translator = PigLatinTranslator()
-            translation = translator.convert(text)
+            translation = piglatin.convert(text)
         except Exception,e:
             description = None
             if (len(e.args) > 0):
@@ -43,4 +42,4 @@ app = falcon.API(middleware=[
     RequireJson(),
     JsonTranslator(),
 ])
-app.add_route('/piglatin', procedure)
+app.add_route('/', procedure)
