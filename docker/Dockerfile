@@ -6,4 +6,4 @@ RUN pip install falcon gunicorn
 WORKDIR /app
 
 EXPOSE 80
-CMD ["gunicorn", "-b", "0.0.0.0:80", "sample:api"]
+CMD ["gunicorn", "-b", "0.0.0.0:80", "api:app"]
