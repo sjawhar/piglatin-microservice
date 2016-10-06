@@ -4,27 +4,27 @@ import falcon
 
 class RequireJson(object):
 
-    def process_request(self, req, resp):
-        if not req.client_accepts_json:
+    def process_request(self, request, response):
+        if not request.client_accepts_json:
             raise falcon.HTTPNotAcceptable('This API only supports responses encoded as JSON.')
 
-        if req.method in ('POST', 'PUT'):
-            if req.content_type is None or 'application/json' not in req.content_type:
+        if request.method in ('POST', 'PUT'):
+            if request.content_type is None or 'application/json' not in request.content_type:
                 raise falcon.HTTPUnsupportedMediaType('This API only supports requests encoded as JSON.')
 
 
 class JsonTranslator(object):
 
-    def process_request(self, req, resp):
-        # req.stream corresponds to the WSGI wsgi.input environ variable,
+    def process_request(self, request, response):
+        # request.stream corresponds to the WSGI wsgi.input environ variable,
         # and allows you to read bytes from the request body.
         #
         # See also: PEP 3333
-        if req.content_length in (None, 0):
+        if request.content_length in (None, 0):
             # Nothing to do
             return
 
-        body = req.stream.read()
+        body = request.stream.read()
         if not body:
             raise falcon.HTTPBadRequest(
                 'Empty request body',
@@ -32,7 +32,7 @@ class JsonTranslator(object):
             )
 
         try:
-            req.context['doc'] = json.loads(body.decode('utf-8'))
+            request.context['doc'] = json.loads(body.decode('utf-8'))
 
         except (ValueError, UnicodeDecodeError):
             raise falcon.HTTPError(
@@ -41,8 +41,8 @@ class JsonTranslator(object):
                 'Could not decode the request body. The JSON was incorrect or not encoded as UTF-8.'
             )
 
-    def process_response(self, req, resp, resource):
-        if 'result' not in req.context:
+    def process_response(self, request, response, resource):
+        if 'result' not in request.context:
             return
 
-        resp.body = json.dumps(req.context['result'], indent=4)
+        response.body = json.dumps(request.context['result'], indent=4)
