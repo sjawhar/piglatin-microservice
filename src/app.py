@@ -5,7 +5,6 @@ import piglatin
 class PigLatinProcedure(object):
 
     def on_post(self, request, response):
-
         if request.content_length in (None, 0):
             raise falcon.HTTPBadRequest(
                 'No text',
