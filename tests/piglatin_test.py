@@ -1,5 +1,6 @@
 import unittest
 from src import piglatin
+from os import linesep
 
 class TestPigLatinMethods(unittest.TestCase):
 
@@ -24,11 +25,25 @@ class TestPigLatinMethods(unittest.TestCase):
 
     def test_split_words_splits_on_space(self):
         test_sentences = {
-            ' ' : ['', ''],
-            'test test' : ['test', 'test'],
-            ' '.join(['test'] * 1000) : ['test'] * 1000
+            'test test' : ['test', ' ', 'test'],
+            'test  test' : ['test', '  ', 'test']
         }
         
+        for (sentence, words) in test_sentences.iteritems():
+            test_words = piglatin._split_words(sentence)
+            self.assertEqual(
+                words,
+                test_words,
+                'calling _split_words() on ' + sentence + ' returned unexpected result: ' + str(test_words)
+            )
+
+    def test_split_words_splits_on_newline(self):
+        test_sentences = {
+            'test\rtest' : ['test', '\r', 'test'],
+            'test\r\ntest' : ['test', '\r\n', 'test'],
+            'test' + linesep + 'test' : ['test', linesep, 'test']
+        }
+
         for (sentence, words) in test_sentences.iteritems():
             test_words = piglatin._split_words(sentence)
             self.assertEqual(
@@ -58,9 +73,11 @@ class TestPigLatinMethods(unittest.TestCase):
     def test_join_words_returns_string(self):
         test_words = [
             ['test'],
-            [''],
+            [' '],
             ['', ''],
-            ['test', 'test'],
+            ['test', ' ', 'test'],
+            ['test', '\r\n', 'test'],
+            [linesep, 'test'],
             ['test'] * 1000
         ]
         
@@ -71,11 +88,13 @@ class TestPigLatinMethods(unittest.TestCase):
                 'calling _join_words() on ' + str(words) + ' should return a string'
             )
 
-    def test_join_words_joins_with_spaces(self):
+    def test_join_words_joins_elements(self):
         test_words = [
-            (['', ''], ' '),
-            (['test', 'test'], 'test test'),
-            (['test'] * 1000, ' '.join(['test'] * 1000))
+            (['', ''], ''),
+            (['test', ' ', 'test'], 'test test'),
+            (['test', '   ', 'test'], 'test   test'),
+            (['test', ' ', ' ', 'test'], 'test  test'),
+            ([linesep, 'test'], linesep + 'test')
         ]
         
         for (words, sentence) in test_words:
@@ -89,18 +108,6 @@ class TestPigLatinMethods(unittest.TestCase):
     def test_join_words_empty_list_raises_value_error(self):
         with self.assertRaises(ValueError):
             piglatin._join_words([])
-
-    """
-    Tests for piglatin._join_lines()
-    """
-    def test_join_words_returns_string(self):
-        pass
-
-    def test_join_words_joins_with_os_newlines(self):
-        pass
-
-    def test_join_words_empty_list_returns_empty_string(self):
-        pass
 
     """
     Tests for piglatin._trim_punctuation()
@@ -184,13 +191,11 @@ class TestPigLatinMethods(unittest.TestCase):
                 test_translation,
                 'translation of ' + word + ' should be ' + translation + ', but instead got ' + test_translation
             )
+
     """
     Tests for piglatin.to_pig_latin()
     """
-    def test_to_pig_latin_preserves_word_count(self):
-        pass
-
-    def test_to_pig_latin_preserves_paragraphs(self):
+    def test_to_pig_latin(self):
         pass
 
 suite = unittest.TestLoader().loadTestsFromTestCase(TestPigLatinMethods)
