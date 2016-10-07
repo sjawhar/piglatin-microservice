@@ -58,9 +58,15 @@ class PigLatinProcedure(object):
         response.status = falcon.HTTP_200
         request.context['result'] = {'translation': translation}
 
-procedure = PigLatinProcedure()
+class StatusPageProcedure(object):
+
+    def on_get(self, request, response):
+        response.status = falcon.HTTP_200
+        response.body = 'The pig latin translation microservice is running. POST to /translate to check it out!'
+
 api = falcon.API(middleware=[
     RequireJson(),
     JsonTranslator(),
 ])
-api.add_route('/', procedure)
+api.add_route('/', StatusPageProcedure())
+api.add_route('/translate', PigLatinProcedure())
