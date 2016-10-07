@@ -15,7 +15,7 @@ class PigLatinProcedure(object):
             Content -- { translation : string }
 
         Error Response:
-            Code -- 4xx or 5xx
+            Code -- 400 or 500
             Content -- { title : string[, description : string]}
         """
 
@@ -62,7 +62,7 @@ class StatusPageProcedure(object):
 
     def on_get(self, request, response):
         response.status = falcon.HTTP_200
-        response.body = 'The pig latin translation microservice is running. POST to /translate to check it out!'
+        response.body = 'The pig latin translation microservice is running. POST to /translate to check it out!\r\nTODO: Add docs here'
 
 api = falcon.API(middleware=[
     RequireJson(),
