@@ -4,6 +4,8 @@ RUN apk add --update musl py-pip bash
 RUN pip install falcon gunicorn
 
 WORKDIR /app
+COPY src src
+COPY tests tests
 ENV PYTHONPATH=/app
 
 EXPOSE 80
