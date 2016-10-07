@@ -5,6 +5,20 @@ import piglatin
 class PigLatinProcedure(object):
 
     def on_post(self, request, response):
+        """Validates request and calls pig latin translation library
+
+        Required Body Properties:
+            text -- string of length > 0
+
+        Success Response:
+            Code -- 200
+            Content -- { translation : string }
+
+        Error Response:
+            Code -- 4xx or 5xx
+            Content -- { title : string[, description : string]}
+        """
+
         if request.content_length in (None, 0):
             raise falcon.HTTPBadRequest(
                 'Request body is empty.',
