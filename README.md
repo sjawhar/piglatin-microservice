@@ -61,6 +61,21 @@ The value of `text` must have length of at least 1.
 }
 ```
 
+## Running Tests
+Tests are contained in the `/test` directory. To run them, you can run
+```bash
+docker run --rm sjawhar/piglatin python tests/$TESTFILE
+```
+where `$TESTFILE` is the name of one of the test suite files (e.g. `piglatin_test.py`)
+
+If you already have a piglatin container running, simply `docker exec -it $NAME /bin/bash` and run
+```bash
+python tests/$TESTFILE
+```
+To make sure you have all the needed libraries and no conflict, it would be best to run tests inside the runnning container.
+
+Test stubs for the API middleware are included, but they are not implemented.
+
 ## Libraries Used
 * [Falcon](https://falconframework.org/)
 * [Gunicorn](http://gunicorn.org/)
@@ -79,6 +94,7 @@ The value of `text` must have length of at least 1.
 * The app is currently using Falcon, a REST framework, for RPC calls. It's easy enough to change, since most of `app.py` is boilerplate.
 * We could add a `language` parameter to the request body, and have pig latin just be one of the options.
     - Would just require changing a few lines of code in the try block in `PigLatinProcedure.on_post()`, and renaming `piglatin.to_pig_latin()` to something like `translate()`
+* Could add a `/test` endpoint that runs all unit tests and displays the result in the browser. Not very necessary if build process is running tests correctly before deploying, but might be cool.
 
 ## Other Notes
 If you'd like to mount the project files into the container and poke around with the app while it's running, run:
