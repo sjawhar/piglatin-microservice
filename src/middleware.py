@@ -8,7 +8,7 @@ class RequireJson(object):
         if not request.client_accepts_json:
             raise falcon.HTTPNotAcceptable('This API only supports responses encoded as JSON.')
 
-        if request.method in ('POST', 'PUT'):
+        if request.method in ('POST', 'PATCH', 'PUT'):
             if request.content_type is None or 'application/json' not in request.content_type:
                 raise falcon.HTTPUnsupportedMediaType('This API only supports requests encoded as JSON.')
 
