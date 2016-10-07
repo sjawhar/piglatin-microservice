@@ -1,6 +1,6 @@
 from string import punctuation
 from os import linesep
-from re import split, search
+from re import split, search, sub
 
 def to_pig_latin(text):
     """Convert text to pig latin
@@ -74,6 +74,7 @@ def _trim_punctuation(word):
     return word.strip(''.join(_PUNCTUATION))
 
 def _match_capitalization(word, match_word):
+    match_word = sub('[^a-zA-Z]', '', match_word)
     if match_word.istitle():
-        return word.title()
+        return word[0].upper() + word[1:].lower()
     return word

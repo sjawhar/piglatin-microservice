@@ -20,7 +20,7 @@ class TestPigLatinMethods(unittest.TestCase):
             self.assertIsInstance(
                 piglatin._split_words(sentence),
                 list,
-                'calling _split_words() on ' + sentence + ' should return an array'
+                'Calling _split_words() on %s should return an array.' % sentence
             )
 
     def test_split_words_splits_on_space(self):
@@ -34,7 +34,11 @@ class TestPigLatinMethods(unittest.TestCase):
             self.assertEqual(
                 words,
                 test_words,
-                'calling _split_words() on ' + sentence + ' returned unexpected result: ' + str(test_words)
+                """
+                Calling _split_words() on %s returned an unexpected result.
+                Expected: %s
+                Actual: %s
+                """ % (sentence, words, test_words)
             )
 
     def test_split_words_splits_on_newline(self):
@@ -49,14 +53,18 @@ class TestPigLatinMethods(unittest.TestCase):
             self.assertEqual(
                 words,
                 test_words,
-                'calling _split_words() on ' + sentence + ' returned unexpected result: ' + str(test_words)
+                """
+                Calling _split_words() on %s returned an unexpected result.
+                Expected: %s
+                Actual: %s
+                """ % (sentence, words, test_words)
             )
 
     def test_split_words_empty_string_returns_list_with_empty_string(self):
         self.assertEqual(
             [''],
             piglatin._split_words(''),
-            'calling _split_words() on an empty string should return a list with one member: an empty string'
+            'Calling _split_words() on an empty string should return a list with one member: an empty string.'
         )
 
     def test_split_words_without_space_returns_list_with_word(self):
@@ -64,7 +72,7 @@ class TestPigLatinMethods(unittest.TestCase):
         self.assertEqual(
             [sentence_without_spaces],
             piglatin._split_words(sentence_without_spaces),
-            'calling _split_words() on a string with no spaces should return a list with one member: the original string'
+            'Calling _split_words() on a string with no spaces should return a list with one member: the original string.'
         )
 
     """
@@ -85,7 +93,7 @@ class TestPigLatinMethods(unittest.TestCase):
             self.assertIsInstance(
                 piglatin._join_words(words),
                 basestring,
-                'calling _join_words() on ' + str(words) + ' should return a string'
+                'Calling _join_words() on %s should return a string.' % words
             )
 
     def test_join_words_joins_elements(self):
@@ -102,7 +110,11 @@ class TestPigLatinMethods(unittest.TestCase):
             self.assertEqual(
                 sentence,
                 test_sentence,
-                'calling _join_words() on ' + str(words) + ' returned unexpected result: ' + test_sentence
+                """
+                Calling _join_words() on %s returned an unexpected result.
+                Expected: %s
+                Actual: %s
+                """ % (words, sentence, test_sentence)
             )
 
     def test_join_words_empty_list_raises_value_error(self):
@@ -123,7 +135,11 @@ class TestPigLatinMethods(unittest.TestCase):
             self.assertEqual(
                 trimmed_word,
                 test_trimmed_word,
-                'calling _trim_punctuation() on ' + word + ' returned ' + test_trimmed_word + ', should be ' + trimmed_word
+                """
+                Calling _trim_punctuation() on %s returned an unexpected result.
+                Expected: %s
+                Actual: %s
+                """ % (word, trimmed_word, test_trimmed_word)
             )
 
     def test_trim_punctuation_preserves_contractions(self):
@@ -139,18 +155,33 @@ class TestPigLatinMethods(unittest.TestCase):
             self.assertEqual(
                 contraction,
                 test_trim,
-                'calling _trim_punctuation() on ' + contraction + ' returned ' + test_trim + ', should be ' + contraction
+                """
+                Calling _trim_punctuation() on %s returned an unexpected result.
+                Expected: %s
+                Actual: %s
+                """ % (contraction, contraction, test_trim)
             )
     
     """
     Tests for piglatin._match_capitalization()
     """
-    def test_match_capitalization_perserves_title_case(self):
-        self.assertEqual(
-            'Isthay',
-            piglatin._match_capitalization('isThay', 'This'),
-            'calling _match_capitalization() should correct title case'
-        )
+    def test_match_capitalization_matches_title_case(self):
+        test_words = [
+            ('isThay', 'This', 'Isthay'),
+            ("ou'reYay", "You're", "Ou'reyay"),
+            ("Isn'tyay", "Isn't", "Isn'tyay")
+        ]
+        for (word, match_word, capitalization) in test_words:
+            test_capitalization = piglatin._match_capitalization(word, match_word)
+            self.assertEqual(
+                capitalization,
+                test_capitalization,
+                """
+                Calling _match_capitalization() on (%s, %s) returned an unexpected result.
+                Expected: %s
+                Actual: %s
+                """ % (word, match_word, capitalization, test_capitalization)
+            )
 
     """
     Tests for piglatin._convert_word()
@@ -173,7 +204,11 @@ class TestPigLatinMethods(unittest.TestCase):
             self.assertEqual(
                 translation,
                 test_translation,
-                'translation of ' + word + ' should be ' + translation + ', but instead got ' + test_translation
+                """
+                Calling _convert_word() on %s returned an unexpected result.
+                Expected: %s
+                Actual: %s
+                """ % (word, translation, test_translation)
             )
     
     def test_convert_word_works_with_contractions(self):
@@ -189,14 +224,34 @@ class TestPigLatinMethods(unittest.TestCase):
             self.assertEqual(
                 translation,
                 test_translation,
-                'translation of ' + word + ' should be ' + translation + ', but instead got ' + test_translation
+                """
+                Calling _convert_word() on %s returned an unexpected result.
+                Expected: %s
+                Actual: %s
+                """ % (word, translation, test_translation)
             )
 
     """
     Tests for piglatin.to_pig_latin()
     """
     def test_to_pig_latin(self):
-        pass
+        corpora = [
+            ('Good day to you, sir!', 'Oodgay ayday otay ouyay, irsay!'),
+            ('This is the first paragraph.\r\nAnd this is the second.', 'Isthay isyay ethay irstfay aragraphpay.\r\nAndyay isthay isyay ethay econdsay.'),
+            ("You're thrilled, I'm sure, that contractions aren't a problem.", "Ou'reyay illedthray, I'myay uresay, atthay ontractionscay aren'tyay ayay oblempray.")
+        ]
+
+        for (text, translation) in corpora:
+            test_translation = piglatin.to_pig_latin(text)
+            self.assertEqual(
+                translation,
+                test_translation,
+                """
+                Calling to_pig_latin() on %s returned an unexpected result.
+                Expected: %s
+                Actual: %s
+                """ % (text, translation, test_translation)
+            )
 
 suite = unittest.TestLoader().loadTestsFromTestCase(TestPigLatinMethods)
 unittest.TextTestRunner(verbosity=2).run(suite)
