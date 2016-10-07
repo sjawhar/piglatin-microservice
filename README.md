@@ -104,5 +104,5 @@ docker run -dp 80:80 -v "/path/to/app:/app" sjawhar/piglatin
 
 If you'd like to build the Docker image, run the following from the project **root folder**:
 ```bash
-docker build -t sjawhar/piglatin -f ./docker/Dockerfile .
+docker build -t sjawhar/piglatin .
 ```
