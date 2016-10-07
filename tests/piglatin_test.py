@@ -163,21 +163,21 @@ class TestPigLatinMethods(unittest.TestCase):
             )
     
     """
-    Tests for piglatin._match_capitalization()
+    Tests for piglatin._fix_title_case()
     """
-    def test_match_capitalization_matches_title_case(self):
+    def test_fix_title_case_matches_title_case(self):
         test_words = [
             ('isThay', 'This', 'Isthay'),
             ("ou'reYay", "You're", "Ou'reyay"),
             ("Isn'tyay", "Isn't", "Isn'tyay")
         ]
         for (word, match_word, capitalization) in test_words:
-            test_capitalization = piglatin._match_capitalization(word, match_word)
+            test_capitalization = piglatin._fix_title_case(word, match_word)
             self.assertEqual(
                 capitalization,
                 test_capitalization,
                 """
-                Calling _match_capitalization() on (%s, %s) returned an unexpected result.
+                Calling _fix_title_case() on (%s, %s) returned an unexpected result.
                 Expected: %s
                 Actual: %s
                 """ % (word, match_word, capitalization, test_capitalization)

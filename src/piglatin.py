@@ -62,7 +62,7 @@ def _convert_word(word):
     else:
         converted_word = word[first_vowel:] + word[:first_vowel] + 'ay'
 
-    return _match_capitalization(converted_word, word)
+    return _fix_title_case(converted_word, word)
 
 def _split_words(text):
     """Split a string on any whitespace (including newlines)
@@ -115,7 +115,7 @@ def _trim_punctuation(word):
 
     return word.strip(''.join(_PUNCTUATION))
 
-def _match_capitalization(word, match_word):
+def _fix_title_case(word, match_word):
     """Match pig latin translation to capitalization of original word if it was title case
     e.g. You're -> ou'reYay -> Ou'reyay
     
